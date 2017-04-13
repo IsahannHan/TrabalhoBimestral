@@ -1,24 +1,14 @@
-package dbconnection;
+package dbconnection.sql;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
+import dbconnection.Coluna;
+import dbconnection.Tabela;
+
 public class UtilSql {
 	
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
-		new UtilSql();
-	}
-	
-	public UtilSql() throws IllegalArgumentException, IllegalAccessException{
-		Animal o = new Animal();
-		
-		o.setIdade(10);
-		o.setNome("slaçkdfj");
-		o.setPeso(new BigDecimal(5.3));
-		System.out.println(getCreateSql(o));
-		System.out.println(getInsertSql(o));
-	}
-	
+	//Métodos CRUD
 	public String getCreateSql(Object o){
 		StringBuilder sb = new StringBuilder();
 		Class<?> clazz = o.getClass();
@@ -72,6 +62,103 @@ public class UtilSql {
 		return sb.toString();
 	}
 
+	public String getInsertSql(Object o) throws IllegalArgumentException, IllegalAccessException{
+		Class<?> clazz = o.getClass();
+		//sbCn = String Builder Column Names // sbCv = String Builder Column Values
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sbCn = new StringBuilder();
+		StringBuilder sbCv = new StringBuilder();
+		
+		sbCn.append("INSERT INTO "+ getTableName(o)+"(");
+		int x = 0;
+		for(Field f : clazz.getDeclaredFields()){
+			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
+			//Fará a vírgula somente depois que passar do primary key (id_animal).
+			if(x > 1){
+				sbCn.append(", ");
+				sbCv.append(", ");
+			}
+			f.setAccessible(true);
+			
+			if(!getColumnName(f, anotacaoColuna).equals("id_animal")){
+				sbCv.append(f.get(o));
+				sbCn.append(getColumnName(f, anotacaoColuna));
+			}			
+			x++;
+		}
+		sbCn.append(")\nVALUES (");		
+		sbCv.append(");");
+		
+		sb.append(sbCn.append(sbCv));
+		
+		return sb.toString();
+	}
+	
+	public String getDeleteSql(Object o) throws IllegalArgumentException, IllegalAccessException{
+		StringBuilder sb = new StringBuilder();
+		Class<?> clazz = o.getClass();
+		
+		sb.append("DELETE FROM "+ getTableName(o) +" WHERE ");
+		for(Field f : clazz.getDeclaredFields()){
+			f.setAccessible(true);
+			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
+			
+			if(getColumnName(f, anotacaoColuna).equals("id_animal")){
+				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
+				sb.append(f.get(o) +";");
+			}
+		}
+		
+		return sb.toString();
+	}
+	
+	public String getDropSql(Object o){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("DROP TABLE "+ getTableName(o) +";");
+		return sb.toString();
+	}
+	
+	public String getSelectAllSql(Object o){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("SELECT * FROM " + getTableName(o) + ";");		
+		return sb.toString();
+	}
+	
+	public String getSelectSql(Object o) throws IllegalArgumentException, IllegalAccessException{
+		Class<?> clazz = o.getClass();
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("SELECT * FROM " + getTableName(o) + " WHERE ");
+		for(Field f : clazz.getDeclaredFields()){
+			f.setAccessible(true);
+			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
+			
+			if(getColumnName(f, anotacaoColuna).equals("id_animal")){
+				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
+				sb.append(f.get(o) +";");
+			}
+		}
+		return sb.toString();
+	}
+
+	//Métodos auxiliares
+	private String getTableName(Object o) {
+		Class<?> clazz = o.getClass();
+		
+		//Cria o nome da tabela com base na anotação.
+		String nomeTabela;
+		if(clazz.isAnnotationPresent(Tabela.class)){
+			Tabela anotacaoTabela = clazz.getAnnotation(Tabela.class);
+			nomeTabela = anotacaoTabela.value().toLowerCase();
+		}else{
+			nomeTabela = clazz.getSimpleName().toLowerCase();
+		}
+		
+		return nomeTabela;
+	}
+	
 	private String getColumnName(Field field, Coluna anotacaoColuna) {
 		String nomeColuna;
 		//Define o nome da coluna.
@@ -86,74 +173,5 @@ public class UtilSql {
 		}		
 		return nomeColuna;
 		
-	}
-
-	private String getInsertSql(Object o) throws IllegalArgumentException, IllegalAccessException{
-		Class<?> clazz = o.getClass();
-		//sbCn = String Builder Column Names // sbCv = String Builder Column Values
-		StringBuilder sbCn = new StringBuilder();
-		StringBuilder sbCv = new StringBuilder();
-		
-		sbCn.append("INSERT INTO "+ getTableName(o)+"(");
-		int x = 0;
-		for(Field f : clazz.getDeclaredFields()){
-			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
-			if(x > 0){
-				sbCn.append(", ");
-				sbCv.append(", ");
-			}
-			f.setAccessible(true);
-			sbCn.append(getColumnName(f, anotacaoColuna));
-			if(!sbCn.equals("id_animal")){
-				sbCv.append(f.get(o));
-			}			
-			x++;
-		}
-		sbCn.append(") VALUES (");
-		
-//		for(Field f : clazz.getDeclaredFields()){
-//			if(x > 0)
-//				sbCn.append(", ");
-//				
-//			f.setAccessible(true);
-//			
-//			x++;
-//		}
-		sbCv.append(");");
-		
-		sbCn.append(sbCv);
-		
-		
-		return sbCn.toString();
-	}
-
-	private String getAttributes(Object o) {
-		Class<?> clazz = o.getClass();
-		StringBuilder sb = new StringBuilder();
-		
-		int x = 0;
-		for(Field f : clazz.getDeclaredFields()){
-			if(x > 0)
-				sb.append(", ");
-			sb.append(f.getName());
-			x++;
-		}
-		
-		return sb.toString();
-	}
-
-	private String getTableName(Object o) {
-		Class<?> clazz = o.getClass();
-		
-		//Cria o nome da tabela com base na anotação.
-		String nomeTabela;
-		if(clazz.isAnnotationPresent(Tabela.class)){
-			Tabela anotacaoTabela = clazz.getAnnotation(Tabela.class);
-			nomeTabela = anotacaoTabela.value().toLowerCase();
-		}else{
-			nomeTabela = clazz.getSimpleName().toLowerCase();
-		}
-		
-		return nomeTabela;
 	}
 }
