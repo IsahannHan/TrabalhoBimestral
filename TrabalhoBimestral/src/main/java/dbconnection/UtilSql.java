@@ -5,33 +5,25 @@ import java.math.BigDecimal;
 
 public class UtilSql {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
 		new UtilSql();
 	}
 	
-	public UtilSql(){
+	public UtilSql() throws IllegalArgumentException, IllegalAccessException{
 		Animal o = new Animal();
 		
 		o.setIdade(10);
 		o.setNome("slaçkdfj");
 		o.setPeso(new BigDecimal(5.3));
 		System.out.println(getCreateSql(o));
-//		System.out.println(getInsertSql(o));
+		System.out.println(getInsertSql(o));
 	}
 	
 	public String getCreateSql(Object o){
 		StringBuilder sb = new StringBuilder();
 		Class<?> clazz = o.getClass();
 		
-		//Cria o nome da tabela com base na anotação.
-		String nomeTabela;
-		if(clazz.isAnnotationPresent(Tabela.class)){
-			Tabela anotacaoTabela = clazz.getAnnotation(Tabela.class);
-			nomeTabela = anotacaoTabela.value().toLowerCase();
-		}else{
-			nomeTabela = clazz.getSimpleName().toLowerCase();
-		}
-			
+		String nomeTabela = getTableName(o);
 		sb.append("CREATE TABLE "+ nomeTabela +"( ");
 		
 		//Array que pega todos os atributos da classe, os quais serão criados como colunas.
@@ -44,28 +36,19 @@ public class UtilSql {
 				
 			Field field = atributos[i];
 			
-			String nomeColuna;
+			Coluna anotacaoColuna = field.getAnnotation(Coluna.class);
+			
+			String nomeColuna = getColumnName(field, anotacaoColuna);
 			String tipoColuna = "";
 			StringBuilder restricaoColuna = new StringBuilder();
 			
-			//Define as restrições da coluna tais como pk ou not null.
-			if(field.isAnnotationPresent(Coluna.class)){
-				Coluna anotacaoColuna = field.getAnnotation(Coluna.class);
-				
-				if(anotacaoColuna.nome().isEmpty()){
-					nomeColuna = field.getName().toLowerCase();
-				}else{
-					nomeColuna = anotacaoColuna.nome();
-				}
-				
-				if(anotacaoColuna.pk()){
-					restricaoColuna.append("PRIMARY KEY ");
-				}
-				if(!anotacaoColuna.restricao().isEmpty()){
-					restricaoColuna.append(anotacaoColuna.restricao());
-				}
-			}else{
-				nomeColuna = field.getName().toLowerCase();
+			
+			//Define as restrições da coluna.
+			if(anotacaoColuna.pk()){
+				restricaoColuna.append("PRIMARY KEY ");
+			}
+			if(!anotacaoColuna.restricao().isEmpty()){
+				restricaoColuna.append(anotacaoColuna.restricao());
 			}
 			
 			//Define o tipo da coluna.
@@ -89,23 +72,59 @@ public class UtilSql {
 		return sb.toString();
 	}
 
-	private String getInsert(Object o){
+	private String getColumnName(Field field, Coluna anotacaoColuna) {
+		String nomeColuna;
+		//Define o nome da coluna.
+		if(field.isAnnotationPresent(Coluna.class)){
+			if(anotacaoColuna.nome().isEmpty()){
+				nomeColuna = field.getName().toLowerCase();
+			}else{
+				nomeColuna = anotacaoColuna.nome();
+			}
+		}else{
+			nomeColuna = field.getName().toLowerCase();
+		}		
+		return nomeColuna;
+		
+	}
+
+	private String getInsertSql(Object o) throws IllegalArgumentException, IllegalAccessException{
 		Class<?> clazz = o.getClass();
-		StringBuilder sb = new StringBuilder();
+		//sbCn = String Builder Column Names // sbCv = String Builder Column Values
+		StringBuilder sbCn = new StringBuilder();
+		StringBuilder sbCv = new StringBuilder();
 		
+		sbCn.append("INSERT INTO "+ getTableName(o)+"(");
+		int x = 0;
+		for(Field f : clazz.getDeclaredFields()){
+			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
+			if(x > 0){
+				sbCn.append(", ");
+				sbCv.append(", ");
+			}
+			f.setAccessible(true);
+			sbCn.append(getColumnName(f, anotacaoColuna));
+			if(!sbCn.equals("id_animal")){
+				sbCv.append(f.get(o));
+			}			
+			x++;
+		}
+		sbCn.append(") VALUES (");
 		
-		
-//		int x = 0;
 //		for(Field f : clazz.getDeclaredFields()){
 //			if(x > 0)
-//				sb.append(", ");
+//				sbCn.append(", ");
 //				
 //			f.setAccessible(true);
-//			sb.append(f.get(o));
+//			
 //			x++;
 //		}
+		sbCv.append(");");
 		
-		return sb.toString();
+		sbCn.append(sbCv);
+		
+		
+		return sbCn.toString();
 	}
 
 	private String getAttributes(Object o) {
@@ -124,6 +143,17 @@ public class UtilSql {
 	}
 
 	private String getTableName(Object o) {
-		return o.getClass().getSimpleName().toLowerCase();
+		Class<?> clazz = o.getClass();
+		
+		//Cria o nome da tabela com base na anotação.
+		String nomeTabela;
+		if(clazz.isAnnotationPresent(Tabela.class)){
+			Tabela anotacaoTabela = clazz.getAnnotation(Tabela.class);
+			nomeTabela = anotacaoTabela.value().toLowerCase();
+		}else{
+			nomeTabela = clazz.getSimpleName().toLowerCase();
+		}
+		
+		return nomeTabela;
 	}
 }
