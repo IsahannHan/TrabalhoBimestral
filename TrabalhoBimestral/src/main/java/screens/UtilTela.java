@@ -87,14 +87,14 @@ public class UtilTela {
 		JButton delete = new JButton("Delete");		
 		delete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-//				a.setId(Integer.parseInt(textFields.get(0).getText()));
-//				try {
-//					sql.Delete(a);
-//				} catch (IllegalArgumentException e) {
-//					e.printStackTrace();
-//				} catch (IllegalAccessException e) {
-//					e.printStackTrace();
-//				}
+				int id = Integer.parseInt(textFields.get(0).getText());
+				try {
+					sql.Delete(clazz, id);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		contentPane.add(delete, createConstraints(x++, y));
@@ -102,7 +102,7 @@ public class UtilTela {
 		JButton search = new JButton("Search all");	
 		search.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				AnimalTableModel x = new AnimalTableModel(sql.SearchAll(clazz));
+				ClasseTableModel x = new ClasseTableModel(sql.SearchAll(clazz), clazz);
 				table.setModel(x);
 			}
 		});

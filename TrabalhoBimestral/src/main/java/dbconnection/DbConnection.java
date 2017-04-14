@@ -83,8 +83,8 @@ public class DbConnection {
 		
 	}
 	
-	public void Delete(Object o) throws IllegalArgumentException, IllegalAccessException{
-		String s = sql.getDeleteSql(o);
+	public void Delete(Object o, int id) throws IllegalArgumentException, IllegalAccessException{
+		String s = sql.getDeleteSql(o, id);
 		PreparedStatement ps;
 		
 		try {

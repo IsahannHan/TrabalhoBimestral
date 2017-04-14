@@ -116,7 +116,7 @@ public class UtilSql {
 		return sb.toString();
 	}
 	
-	public String getDeleteSql(Object o){
+	public String getDeleteSql(Object o, int id){
 		StringBuilder sb = new StringBuilder();
 		clazz = (Class<?>) o;
 		
@@ -128,11 +128,8 @@ public class UtilSql {
 			if(anotacaoColuna.pk() == true){
 				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
 				try {
-					sb.append(f.get(o) +";");
+					sb.append(id +";");
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
