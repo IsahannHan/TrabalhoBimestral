@@ -9,9 +9,9 @@ import dbconnection.Animal;
 
 public class AnimalTableModel extends AbstractTableModel {
 
-	private List<Animal> lista;
+	private List<Object> lista;
 
-	public AnimalTableModel(List<Animal> lista) {
+	public AnimalTableModel(List<Object> lista) {
 		this.lista = lista;
 	}
 	
@@ -25,8 +25,7 @@ public class AnimalTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int column) {
-		Animal a = new Animal();
-		Class<?> clazz = a.getClass();
+		Class<?> clazz = lista.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		
 		switch (column) {
@@ -44,7 +43,7 @@ public class AnimalTableModel extends AbstractTableModel {
 	}	
 
 	public Object getValueAt(int row, int column) {
-		Animal a = lista.get(row);
+		lista.get(row);
 		switch (column) {
 		case 0:
 			return a.getId();
