@@ -24,11 +24,12 @@ import dbconnection.DbConnection;
 public class UtilTela {
 
 	private JTable table;
+	private Class<?> clazz;
 	public JPanel generateScreen(Object o){
 		final DbConnection sql = new DbConnection();
-		final Animal a = new Animal();
 		JPanel contentPane = new JPanel();
-		Class<?> clazz = o.getClass();
+		clazz = o.getClass();
+		
 		
 		final List<JTextField> textFields = new ArrayList<JTextField>();
 		
@@ -58,7 +59,7 @@ public class UtilTela {
 		JButton create = new JButton("Create");
 		create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				sql.Create(a);
+				sql.Create(clazz);
 			}
 		});
 		contentPane.add(create, createConstraints(x++, y));
@@ -66,17 +67,17 @@ public class UtilTela {
 		JButton insert = new JButton("Insert");		
 		insert.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				a.setNome(textFields.get(1).getText());
-				a.setIdade(Integer.parseInt(textFields.get(2).getText()));
-				BigDecimal peso = new BigDecimal(textFields.get(3).getText());
-				a.setPeso(peso);
-				try {
-					sql.Insert(a);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
+//				a.setNome(textFields.get(1).getText());
+//				a.setIdade(Integer.parseInt(textFields.get(2).getText()));
+//				BigDecimal peso = new BigDecimal(textFields.get(3).getText());
+//				a.setPeso(peso);
+//				try {
+//					sql.Insert(a);
+//				} catch (IllegalArgumentException e) {
+//					e.printStackTrace();
+//				} catch (IllegalAccessException e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 		contentPane.add(insert, createConstraints(x++, y));
@@ -84,14 +85,14 @@ public class UtilTela {
 		JButton delete = new JButton("Delete");		
 		delete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				a.setId(Integer.parseInt(textFields.get(0).getText()));
-				try {
-					sql.Delete(a);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
+//				a.setId(Integer.parseInt(textFields.get(0).getText()));
+//				try {
+//					sql.Delete(a);
+//				} catch (IllegalArgumentException e) {
+//					e.printStackTrace();
+//				} catch (IllegalAccessException e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 		contentPane.add(delete, createConstraints(x++, y));
@@ -99,7 +100,7 @@ public class UtilTela {
 		JButton search = new JButton("Search all");	
 		search.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				AnimalTableModel x = new AnimalTableModel(sql.SearchAll(a));
+				AnimalTableModel x = new AnimalTableModel(sql.SearchAll(clazz));
 				table.setModel(x);
 			}
 		});
@@ -108,14 +109,14 @@ public class UtilTela {
 		JButton searchid = new JButton("Search by id");	
 		searchid.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				a.setId(Integer.parseInt(textFields.get(0).getText()));
-				try {
-					sql.SingleSearch(a);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
+//				a.setId(Integer.parseInt(textFields.get(0).getText()));
+//				try {
+//					sql.SingleSearch(a);
+//				} catch (IllegalArgumentException e) {
+//					e.printStackTrace();
+//				} catch (IllegalAccessException e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 		contentPane.add(searchid, createConstraints(x++, y));
