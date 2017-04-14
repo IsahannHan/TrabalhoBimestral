@@ -1,6 +1,7 @@
 package dbconnection;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,7 +16,7 @@ public class DbConnection {
 
 	private Connection con;
 	UtilSql sql = new UtilSql();
-	
+
 	//Funções de conexão
 	public DbConnection(){
 		Connect();
@@ -56,8 +57,9 @@ public class DbConnection {
 	}
 	
 	//Funções de manuseio da tabela
-	public void Create(Animal a){
-		String s = sql.getCreateSql(a);
+	public void Create(Object o){
+		Class<?> clazz = o.getClass();
+		String s = sql.getCreateSql(clazz);
 		PreparedStatement ps;
 		
 		try {
@@ -68,13 +70,13 @@ public class DbConnection {
 		}
 	}
 	
-	public void Insert(Animal a) throws IllegalArgumentException, IllegalAccessException{
-		String s = sql.getInsertSql(a);
+	public void Insert(Object o) throws IllegalArgumentException, IllegalAccessException{
+		Class<?> clazz = o.getClass();
+		String s = sql.getInsertSql(clazz);
 		PreparedStatement ps;
 		
 		try{	
 			ps = con.prepareStatement(s);
-			ps.setString(1, a.getNome());
 			ps.executeUpdate();
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -82,8 +84,9 @@ public class DbConnection {
 		
 	}
 	
-	public void Delete(Animal a) throws IllegalArgumentException, IllegalAccessException{
-		String s = sql.getDeleteSql(a);
+	public void Delete(Object o) throws IllegalArgumentException, IllegalAccessException{
+		Class<?> clazz = o.getClass();
+		String s = sql.getDeleteSql(clazz);
 		PreparedStatement ps;
 		
 		try {
@@ -94,9 +97,10 @@ public class DbConnection {
 		}
 	}
 	
-	public List<Animal> SearchAll(Animal a){
-		List<Animal> lista = new ArrayList<Animal>();
-		String s = sql.getSelectAllSql(a);
+	public List<Object> SearchAll(Object o){
+		Class<?> clazz = o.getClass();
+		List<Object> lista = new ArrayList<Object>();
+		String s = sql.getSelectAllSql(clazz);
 		PreparedStatement ps;
 		
 		try{	
@@ -116,11 +120,12 @@ public class DbConnection {
 		return lista;
 	}
 	
-	public Animal SingleSearch(Animal a) throws IllegalArgumentException, IllegalAccessException{
-		String s = sql.getSelectSql(a);
+	public Object SingleSearch(Object o) throws IllegalArgumentException, IllegalAccessException{
+		Class<?> clazz = o.getClass();
+		String s = sql.getSelectSql(clazz);
+		List<Object> list = new ArrayList<Object>();
 		PreparedStatement ps;
 		
-		Animal c = new Animal();
 		try {
 			ps = con.prepareStatement(s);
 			ResultSet rs = ps.executeQuery();
@@ -128,18 +133,22 @@ public class DbConnection {
 			//Essa linha é necessária para que os objetos em rs sejam acessíveis.
 			rs.next();
 			
-			c.setId(rs.getInt(1));
-			c.setNome(rs.getString(2));
-			c.setIdade(rs.getInt(3));
-			c.setPeso(rs.getBigDecimal(4));
+			while(rs.next()){
+				list.add();
+				rs.getString(2);
+				rs.getInt(3);
+				rs.getBigDecimal(4);
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return c;
 	}
 	
-	public void DropTable(Animal a){
-		String s = sql.getDropSql(a);
+	public void DropTable(Object o){
+		Class<?> clazz = o.getClass();
+		String s = sql.getDropSql(clazz);
 		PreparedStatement ps;
 		
 		try {
