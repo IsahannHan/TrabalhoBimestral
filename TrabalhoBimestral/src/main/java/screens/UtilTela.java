@@ -15,12 +15,12 @@ import javax.swing.JTextField;
 
 import dbconnection.Animal;
 import dbconnection.Coluna;
-import dbconnection.sql.UtilSql;
+import dbconnection.DbConnection;
 
 public class UtilTela {
 
 	public JPanel generateScreen(Object o){
-		final UtilSql sql = new UtilSql();
+		final DbConnection sql = new DbConnection();
 		final Animal a = new Animal();
 		JPanel contentPane = new JPanel();
 		Class<?> clazz = o.getClass();		
@@ -51,7 +51,7 @@ public class UtilTela {
 		JButton create = new JButton("Create");
 		create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				sql.getCreateSql(a);
+				sql.Create(a);
 			}
 		});
 		contentPane.add(create, createConstraints(x, y));
@@ -59,7 +59,15 @@ public class UtilTela {
 		JButton insert = new JButton("Insert");		
 		create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				sql.getInsertSql(a);
+				try {
+					sql.Insert(a);
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		contentPane.add(insert, createConstraints(x+=2, y));
@@ -67,7 +75,15 @@ public class UtilTela {
 		JButton delete = new JButton("Delete");		
 		create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				sql.getDeleteSql(a);
+				try {
+					sql.Delete(a);
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		contentPane.add(delete, createConstraints(x+=2, y));
@@ -75,7 +91,7 @@ public class UtilTela {
 		JButton search = new JButton("Search all");	
 		create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				sql.getSelectAllSql(a);
+				sql.SearchAll(a);
 			}
 		});
 		contentPane.add(search, createConstraints(x+=2, y));
@@ -83,7 +99,15 @@ public class UtilTela {
 		JButton searchid = new JButton("Search by id");	
 		create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				sql.getSelectSql(a);
+				try {
+					sql.SingleSearch(a);
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		contentPane.add(searchid, createConstraints(x+=2, y));

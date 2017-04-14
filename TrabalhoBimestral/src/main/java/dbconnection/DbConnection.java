@@ -17,7 +17,7 @@ public class DbConnection {
 	UtilSql sql = new UtilSql();
 	
 	//Funções de conexão
-	public DbConnection() throws IOException{
+	public DbConnection(){
 		Connect();
 	}
 	
