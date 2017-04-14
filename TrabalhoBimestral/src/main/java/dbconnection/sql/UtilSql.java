@@ -10,12 +10,14 @@ import dbconnection.Tabela;
 
 public class UtilSql {
 	
+	private Class<?> clazz;
+	
 	//Métodos CRUD
 	public String getCreateSql(Object o){
 		StringBuilder sb = new StringBuilder();
-		Class<?> clazz = o.getClass();
+		clazz = (Class<?>) o;
 		
-		String nomeTabela = getTableName(o);
+		String nomeTabela = getTableName(clazz);
 		sb.append("CREATE TABLE "+ nomeTabela +"( ");
 		
 		//Array que pega todos os atributos da classe, os quais serão criados como colunas.
@@ -35,26 +37,26 @@ public class UtilSql {
 			StringBuilder restricaoColuna = new StringBuilder();
 			
 			
-			//Define as restrições da coluna.
-			if(anotacaoColuna.pk()){
-				restricaoColuna.append("PRIMARY KEY ");
-			}
-			if(!anotacaoColuna.restricao().isEmpty()){
-				restricaoColuna.append(anotacaoColuna.restricao());
-			}
-			
 			//Define o tipo da coluna.
 			Class<?> tipoParametro = field.getType();
 			if(tipoParametro.equals(String.class)){
 				tipoColuna = "VARCHAR(255)";
 			} else if (tipoParametro.equals(int.class)){
-				if(!restricaoColuna.toString().contains("PRIMARY KEY")){
+				if(!anotacaoColuna.pk()){
 					tipoColuna = "INTEGER";
 				}
 			} else if (tipoParametro.equals(BigDecimal.class)){
 				tipoColuna = "NUMERIC(5, 2)";
 			} else {
 				tipoColuna = "TIPO_DESCONHECIDO";
+			}
+			
+			//Define as restrições da coluna.
+			if(anotacaoColuna.pk()){
+				restricaoColuna.append("SERIAL PRIMARY KEY ");
+			}
+			if(!anotacaoColuna.restricao().isEmpty()){
+				restricaoColuna.append(anotacaoColuna.restricao());
 			}
 			
 			sb.append("\n\t").append(nomeColuna +" "+ tipoColuna +" "+ restricaoColuna);
@@ -65,7 +67,7 @@ public class UtilSql {
 	}
 
 	public String getInsertSql(Object o){
-		Class<?> clazz = o.getClass();
+		clazz = o.getClass();
 		//sbCn = String Builder Column Names // sbCv = String Builder Column Values
 		StringBuilder sb = new StringBuilder();
 		StringBuilder sbCn = new StringBuilder();
@@ -106,7 +108,7 @@ public class UtilSql {
 	
 	public String getDeleteSql(Object o){
 		StringBuilder sb = new StringBuilder();
-		Class<?> clazz = o.getClass();
+		clazz = (Class<?>) o;
 		
 		sb.append("DELETE FROM "+ getTableName(o) +" WHERE ");
 		for(Field f : clazz.getDeclaredFields()){
@@ -145,7 +147,7 @@ public class UtilSql {
 	}
 	
 	public String getSelectSql(Object o){
-		Class<?> clazz = o.getClass();
+		clazz = (Class<?>) o;
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("SELECT * FROM " + getTableName(o) + " WHERE ");
@@ -171,7 +173,7 @@ public class UtilSql {
 
 	//Métodos auxiliares
 	private String getTableName(Object o) {
-		Class<?> clazz = o.getClass();
+		clazz = (Class<?>) o;
 		
 		//Cria o nome da tabela com base na anotação.
 		String nomeTabela;
