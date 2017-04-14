@@ -1,22 +1,32 @@
 package screens;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import dbconnection.Animal;
+import dbconnection.Coluna;
 
-public class AnimalTableModel extends AbstractTableModel {
+public class ClasseTableModel extends AbstractTableModel {
 
-	private List<Object> lista;
+	private List<String> lista;
+	private Class<?> clazz;
+	
 
-	public AnimalTableModel(List<Object> lista) {
+	public ClasseTableModel(List<String> lista, Class<?> clazz) {
 		this.lista = lista;
+		this.clazz = clazz;
 	}
 	
 	public int getColumnCount() {
-		return 4;
+		int column = 0;
+		for(Field f : clazz.getDeclaredFields()){
+			if(f.getAnnotatedType().equals(Coluna.class)){
+				column++;
+			}
+		}
+		return column;
 	}
 
 	public int getRowCount() {
@@ -25,18 +35,13 @@ public class AnimalTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int column) {
-		Class<?> clazz = lista.getClass();
-		Field[] fields = clazz.getDeclaredFields();
+		List<String> columnNames = new ArrayList<String>();
+		for(Field f : clazz.getDeclaredFields()){
+			columnNames.add(f.getName().toUpperCase());
+		}
 		
-		switch (column) {
-		case 0:
-			return fields[column].getName();
-		case 1:
-			return fields[column].getName();
-		case 2:
-			return fields[column].getName();
-		case 3:
-			return fields[column].getName();
+		for(int i = 0; i < columnNames.size(); i++){
+			return columnNames.get(i);
 		}
 		
 		return super.getColumnName(column);
