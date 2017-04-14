@@ -1,5 +1,6 @@
 package screens;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -13,33 +14,36 @@ public class AnimalTableModel extends AbstractTableModel {
 	public AnimalTableModel(List<Animal> lista) {
 		this.lista = lista;
 	}
-
-	@Override
+	
 	public int getColumnCount() {
-		return 2;
+		return 4;
 	}
 
-	@Override
 	public int getRowCount() {
 		return lista.size();
 	}
 
 	@Override
 	public String getColumnName(int column) {
-
+		Animal a = new Animal();
+		Class<?> clazz = a.getClass();
+		Field[] fields = clazz.getDeclaredFields();
+		
 		switch (column) {
 		case 0:
-			return "Id";
+			return fields[column].getName();
 		case 1:
-			return "Nome";
+			return fields[column].getName();
+		case 2:
+			return fields[column].getName();
+		case 3:
+			return fields[column].getName();
 		}
 		
 		return super.getColumnName(column);
-	}
+	}	
 
-	@Override
 	public Object getValueAt(int row, int column) {
-		
 		Animal a = lista.get(row);
 		switch (column) {
 		case 0:
@@ -51,7 +55,6 @@ public class AnimalTableModel extends AbstractTableModel {
 		case 3:
 			return a.getPeso();
 		}
-		return "coluna inexistente";
+		return "Coluna inexistente";
 	}
-
 }
