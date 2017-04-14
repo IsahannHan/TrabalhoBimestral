@@ -3,7 +3,9 @@ package dbconnection.sql;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
+import dbconnection.Animal;
 import dbconnection.Coluna;
+import dbconnection.Pessoa;
 import dbconnection.Tabela;
 
 public class UtilSql {
@@ -80,7 +82,7 @@ public class UtilSql {
 			}
 			f.setAccessible(true);
 			
-			if(!getColumnName(f, anotacaoColuna).equals("id_animal")){
+			if(anotacaoColuna.pk() == false){
 				try {
 					sbCv.append(f.get(o));
 				} catch (IllegalArgumentException e) {
@@ -111,7 +113,7 @@ public class UtilSql {
 			f.setAccessible(true);
 			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
 			
-			if(getColumnName(f, anotacaoColuna).equals("id_animal")){
+			if(anotacaoColuna.pk() == true){
 				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
 				try {
 					sb.append(f.get(o) +";");
@@ -151,7 +153,7 @@ public class UtilSql {
 			f.setAccessible(true);
 			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
 			
-			if(getColumnName(f, anotacaoColuna).equals("id_animal")){
+			if(anotacaoColuna.pk() == true){
 				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
 				try {
 					sb.append(f.get(o) +";");
