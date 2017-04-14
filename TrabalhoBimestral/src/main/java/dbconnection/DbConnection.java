@@ -24,8 +24,8 @@ public class DbConnection {
 	
 	public boolean Connect(){
 		String URL = "jdbc:postgresql://localhost:5432/postgres";
-		String USER = "1234";
-		String PASS = "1234";
+		String USER = "postgres";
+		String PASS = "admin";
 		boolean SUCCESS = false;
 		
 		try {
@@ -37,7 +37,6 @@ public class DbConnection {
 		if(SUCCESS){
 			System.out.println("----CONECTADO----");
 			System.out.println("----BANCO: "+URL+"----\n----USUÁRIO: "+USER+"----\n----SENHA: "+PASS+"----");
-			System.out.println("------------------ \n\n");
 		}else{
 			return SUCCESS;
 		}
@@ -58,8 +57,7 @@ public class DbConnection {
 	
 	//Funções de manuseio da tabela
 	public void Create(Object o){
-		Class<?> clazz = o.getClass();
-		String s = sql.getCreateSql(clazz);
+		String s = sql.getCreateSql(o);
 		PreparedStatement ps;
 		
 		try {
@@ -71,8 +69,7 @@ public class DbConnection {
 	}
 	
 	public void Insert(Object o) throws IllegalArgumentException, IllegalAccessException{
-		Class<?> clazz = o.getClass();
-		String s = sql.getInsertSql(clazz);
+		String s = sql.getInsertSql(o);
 		PreparedStatement ps;
 		
 		try{	
@@ -85,8 +82,7 @@ public class DbConnection {
 	}
 	
 	public void Delete(Object o) throws IllegalArgumentException, IllegalAccessException{
-		Class<?> clazz = o.getClass();
-		String s = sql.getDeleteSql(clazz);
+		String s = sql.getDeleteSql(o);
 		PreparedStatement ps;
 		
 		try {
@@ -98,9 +94,8 @@ public class DbConnection {
 	}
 	
 	public List<Object> SearchAll(Object o){
-		Class<?> clazz = o.getClass();
 		List<Object> lista = new ArrayList<Object>();
-		String s = sql.getSelectAllSql(clazz);
+		String s = sql.getSelectAllSql(o);
 		PreparedStatement ps;
 		
 		try{	
@@ -121,8 +116,7 @@ public class DbConnection {
 	}
 	
 	public Object SingleSearch(Object o) throws IllegalArgumentException, IllegalAccessException{
-		Class<?> clazz = o.getClass();
-		String s = sql.getSelectSql(clazz);
+		String s = sql.getSelectSql(o);
 		List<Object> list = new ArrayList<Object>();
 		PreparedStatement ps;
 		
@@ -147,8 +141,7 @@ public class DbConnection {
 	}
 	
 	public void DropTable(Object o){
-		Class<?> clazz = o.getClass();
-		String s = sql.getDropSql(clazz);
+		String s = sql.getDropSql(o);
 		PreparedStatement ps;
 		
 		try {
