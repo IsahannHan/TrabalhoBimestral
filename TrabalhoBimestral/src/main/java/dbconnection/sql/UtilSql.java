@@ -2,6 +2,7 @@ package dbconnection.sql;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.List;
 
 import dbconnection.Animal;
 import dbconnection.Coluna;
@@ -66,7 +67,7 @@ public class UtilSql {
 		return sb.toString();
 	}
 
-	public String getInsertSql(Object o){
+	public String getInsertSql(Object o, List<?> lista){
 		clazz = o.getClass();
 		//sbCn = String Builder Column Names // sbCv = String Builder Column Values
 		StringBuilder sb = new StringBuilder();
@@ -80,25 +81,34 @@ public class UtilSql {
 			//Fará a vírgula somente depois que passar do primary key (id_animal).
 			if(x > 1){
 				sbCn.append(", ");
-				sbCv.append(", ");
 			}
 			f.setAccessible(true);
 			
 			if(anotacaoColuna.pk() == false){
-				try {
-					sbCv.append(f.get(o));
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				sbCn.append(getColumnName(f, anotacaoColuna));
 			}			
 			x++;
 		}
 		sbCn.append(")\nVALUES (");		
+		
+		int y = 0;
+		for(Field f : clazz.getDeclaredFields()){
+			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
+			f.setAccessible(true);
+			if(y > 1){
+				sbCv.append(", ");
+			}			
+			//Somente entra se for false, pois o id não irá no insert.
+			if(anotacaoColuna.pk() == false){
+				if(f.getType().equals(String.class)){
+					sbCv.append("'"+lista.get(y)+"'");
+				} else {
+					sbCv.append(lista.get(y));
+				}
+			}			
+			y++;
+		}
+		
 		sbCv.append(");");
 		
 		sb.append(sbCn.append(sbCv));

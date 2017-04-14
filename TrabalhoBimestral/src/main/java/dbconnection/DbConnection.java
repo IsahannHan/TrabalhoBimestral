@@ -63,18 +63,20 @@ public class DbConnection {
 		try {
 			ps = con.prepareStatement(s);
 			ps.executeUpdate();
+			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void Insert(Object o) throws IllegalArgumentException, IllegalAccessException{
-		String s = sql.getInsertSql(o);
+	public void Insert(Object o, List<?> lista) throws IllegalArgumentException, IllegalAccessException{
+		String s = sql.getInsertSql(o, lista);
 		PreparedStatement ps;
 		
 		try{	
 			ps = con.prepareStatement(s);
 			ps.executeUpdate();
+			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e){
 			e.printStackTrace();
 		}
@@ -147,6 +149,7 @@ public class DbConnection {
 		try {
 			ps = con.prepareStatement(s);
 			ps.executeUpdate();
+			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

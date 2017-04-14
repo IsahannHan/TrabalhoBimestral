@@ -1,5 +1,6 @@
 package screens;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -45,15 +46,16 @@ public class UtilTela {
 		int z = 0;
 		
 		for(Field f : clazz.getDeclaredFields()){
-			JLabel lblNewLabel = new JLabel(f.getAnnotation(Coluna.class).nome().toUpperCase());
-			contentPane.add(lblNewLabel, createConstraints(z, 0));
-			
-			JTextField textField = new JTextField();
-			textFields.add(textField);
-			textField.setName(f.getName());
-			contentPane.add(textField, createConstraints(z, 1));
-			textField.setColumns(30);
-			z++;
+				JLabel lblNewLabel = new JLabel(f.getAnnotation(Coluna.class).nome().toUpperCase());
+				lblNewLabel.setFont(new Font("SansSerif", Font.ROMAN_BASELINE, 10));
+				contentPane.add(lblNewLabel, createConstraints(z, 0));
+				
+				JTextField textField = new JTextField();
+				textFields.add(textField);
+				textField.setName(f.getName());
+				contentPane.add(textField, createConstraints(z, 1));
+				textField.setColumns(30);
+				z++;
 		}
 		
 		JButton create = new JButton("Create");
@@ -67,17 +69,17 @@ public class UtilTela {
 		JButton insert = new JButton("Insert");		
 		insert.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-//				a.setNome(textFields.get(1).getText());
-//				a.setIdade(Integer.parseInt(textFields.get(2).getText()));
-//				BigDecimal peso = new BigDecimal(textFields.get(3).getText());
-//				a.setPeso(peso);
-//				try {
-//					sql.Insert(a);
-//				} catch (IllegalArgumentException e) {
-//					e.printStackTrace();
-//				} catch (IllegalAccessException e) {
-//					e.printStackTrace();
-//				}
+				List<String> lista = new ArrayList<String>();
+				for(int i = 0; i < textFields.size(); i++){
+					lista.add(textFields.get(i).getText());
+				}
+				try {
+					sql.Insert(clazz, lista);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		contentPane.add(insert, createConstraints(x++, y));
@@ -120,6 +122,14 @@ public class UtilTela {
 			}
 		});
 		contentPane.add(searchid, createConstraints(x++, y));
+		
+		JButton dropTable = new JButton("Drop table");	
+		dropTable.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				sql.DropTable(clazz);
+			}
+		});
+		contentPane.add(dropTable, createConstraints(x++, y));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
