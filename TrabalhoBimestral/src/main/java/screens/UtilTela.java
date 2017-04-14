@@ -26,6 +26,8 @@ public class UtilTela {
 
 	private JTable table;
 	private Class<?> clazz;
+	int id;
+	
 	public JPanel generateScreen(Object o){
 		final DbConnection sql = new DbConnection();
 		JPanel contentPane = new JPanel();
@@ -87,7 +89,7 @@ public class UtilTela {
 		JButton delete = new JButton("Delete");		
 		delete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				int id = Integer.parseInt(textFields.get(0).getText());
+				id = Integer.parseInt(textFields.get(0).getText());
 				try {
 					sql.Delete(clazz, id);
 				} catch (IllegalArgumentException e) {
@@ -111,14 +113,14 @@ public class UtilTela {
 		JButton searchid = new JButton("Search by id");	
 		searchid.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-//				a.setId(Integer.parseInt(textFields.get(0).getText()));
-//				try {
-//					sql.SingleSearch(a);
-//				} catch (IllegalArgumentException e) {
-//					e.printStackTrace();
-//				} catch (IllegalAccessException e) {
-//					e.printStackTrace();
-//				}
+				id = Integer.parseInt(textFields.get(0).getText());
+				try {
+					sql.SingleSearch(clazz, id);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		contentPane.add(searchid, createConstraints(x++, y));

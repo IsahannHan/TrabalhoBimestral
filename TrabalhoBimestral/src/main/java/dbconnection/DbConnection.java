@@ -90,56 +90,58 @@ public class DbConnection {
 		try {
 			ps = con.prepareStatement(s);
 			ps.executeUpdate();
+			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public List<Object> SearchAll(Object o){
-		List<Object> lista = new ArrayList<Object>();
+	public List<String> SearchAll(Object o){
+		int column = 0;
+		for(Field f : ((Class<?>) o).getDeclaredFields()){
+			if(f.isAnnotationPresent(Coluna.class)){
+				column++;
+			}
+		}
+		
+		List<String> lista = new ArrayList<String>(column);
 		String s = sql.getSelectAllSql(o);
 		PreparedStatement ps;
-		
+		ResultSet rs;
 		try{	
 			ps = con.prepareStatement(s);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
+			
 			while(rs.next()){
-				Animal x = new Animal();
-				x.setId(rs.getInt(1));
-				x.setNome(rs.getString(2));
-				x.setIdade(rs.getInt(3));
-				x.setPeso(rs.getBigDecimal(4));
-				lista.add(x);
+				for(int j = 1; j <= column; j++){
+					lista.add(rs.getString(j));
+				}			    
 			}
+			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e){
 			e.printStackTrace();
 		}		
 		return lista;
 	}
 	
-	public Object SingleSearch(Object o) throws IllegalArgumentException, IllegalAccessException{
-		String s = sql.getSelectSql(o);
-		List<Object> list = new ArrayList<Object>();
+	public Object SingleSearch(Object o, int id) throws IllegalArgumentException, IllegalAccessException{
+		String s = sql.getSelectSql(o, id);
+		Object result = null;
 		PreparedStatement ps;
+		ResultSet rs;
 		
 		try {
 			ps = con.prepareStatement(s);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
-			//Essa linha é necessária para que os objetos em rs sejam acessíveis.
 			rs.next();
 			
-			while(rs.next()){
-				list.add();
-				rs.getString(2);
-				rs.getInt(3);
-				rs.getBigDecimal(4);
-			}
-			
+			result = rs.getObject(1);
+			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return c;
+		return result;
 	}
 	
 	public void DropTable(Object o){

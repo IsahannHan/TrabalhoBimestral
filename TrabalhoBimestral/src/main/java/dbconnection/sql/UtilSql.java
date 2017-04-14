@@ -153,7 +153,7 @@ public class UtilSql {
 		return sb.toString();
 	}
 	
-	public String getSelectSql(Object o){
+	public String getSelectSql(Object o, int id){
 		clazz = (Class<?>) o;
 		StringBuilder sb = new StringBuilder();
 		
@@ -165,12 +165,8 @@ public class UtilSql {
 			if(anotacaoColuna.pk() == true){
 				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
 				try {
-					sb.append(f.get(o) +";");
+					sb.append(id +";");
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
