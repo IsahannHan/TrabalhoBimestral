@@ -62,7 +62,7 @@ public class UtilSql {
 		return sb.toString();
 	}
 
-	public String getInsertSql(Object o) throws IllegalArgumentException, IllegalAccessException{
+	public String getInsertSql(Object o){
 		Class<?> clazz = o.getClass();
 		//sbCn = String Builder Column Names // sbCv = String Builder Column Values
 		StringBuilder sb = new StringBuilder();
@@ -81,7 +81,15 @@ public class UtilSql {
 			f.setAccessible(true);
 			
 			if(!getColumnName(f, anotacaoColuna).equals("id_animal")){
-				sbCv.append(f.get(o));
+				try {
+					sbCv.append(f.get(o));
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				sbCn.append(getColumnName(f, anotacaoColuna));
 			}			
 			x++;
@@ -94,7 +102,7 @@ public class UtilSql {
 		return sb.toString();
 	}
 	
-	public String getDeleteSql(Object o) throws IllegalArgumentException, IllegalAccessException{
+	public String getDeleteSql(Object o){
 		StringBuilder sb = new StringBuilder();
 		Class<?> clazz = o.getClass();
 		
@@ -105,7 +113,15 @@ public class UtilSql {
 			
 			if(getColumnName(f, anotacaoColuna).equals("id_animal")){
 				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
-				sb.append(f.get(o) +";");
+				try {
+					sb.append(f.get(o) +";");
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -126,7 +142,7 @@ public class UtilSql {
 		return sb.toString();
 	}
 	
-	public String getSelectSql(Object o) throws IllegalArgumentException, IllegalAccessException{
+	public String getSelectSql(Object o){
 		Class<?> clazz = o.getClass();
 		StringBuilder sb = new StringBuilder();
 		
@@ -137,7 +153,15 @@ public class UtilSql {
 			
 			if(getColumnName(f, anotacaoColuna).equals("id_animal")){
 				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
-				sb.append(f.get(o) +";");
+				try {
+					sb.append(f.get(o) +";");
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return sb.toString();
