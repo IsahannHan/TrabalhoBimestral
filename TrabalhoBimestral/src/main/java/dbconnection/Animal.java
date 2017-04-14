@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 @Tabela("ANIMAL_T")
 public class Animal {
 	
-	@Coluna(nome="id_animal", pk=true, restricao="SERIAL NOT NULL")
+	@Coluna(nome="id_animal", pk=true, restricao="NOT NULL")
 	private int id;
 	
 	@Coluna(nome="nome_animal", restricao="NOT NULL")
