@@ -124,9 +124,16 @@ public class DbConnection {
 		return lista;
 	}
 	
-	public Object SingleSearch(Object o, int id) throws IllegalArgumentException, IllegalAccessException{
+	public List<String> SearchById(Object o, int id) throws IllegalArgumentException, IllegalAccessException{
+		int column = 0;
+		for(Field f : ((Class<?>) o).getDeclaredFields()){
+			if(f.isAnnotationPresent(Coluna.class)){
+				column++;
+			}
+		}
+		
 		String s = sql.getSelectSql(o, id);
-		Object result = null;
+		List<String> result = new ArrayList<String>();
 		PreparedStatement ps;
 		ResultSet rs;
 		
@@ -134,9 +141,12 @@ public class DbConnection {
 			ps = con.prepareStatement(s);
 			rs = ps.executeQuery();
 			
-			rs.next();
+			while(rs.next()){
+				for(int j = 1; j <= column; j++){
+					result.add(rs.getString(j));
+				}
+			}
 			
-			result = rs.getObject(1);
 			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e) {
 			e.printStackTrace();

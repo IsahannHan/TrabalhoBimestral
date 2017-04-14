@@ -130,7 +130,6 @@ public class UtilSql {
 				try {
 					sb.append(id +";");
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
