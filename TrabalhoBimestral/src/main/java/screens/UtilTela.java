@@ -115,7 +115,7 @@ public class UtilTela {
 			public void actionPerformed(ActionEvent arg0) {
 				id = Integer.parseInt(textFields.get(0).getText());
 				try {
-					sql.SingleSearch(clazz, id);
+					sql.SearchById(clazz, id);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
