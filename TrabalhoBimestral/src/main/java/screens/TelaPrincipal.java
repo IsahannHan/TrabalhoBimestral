@@ -35,7 +35,7 @@ public class TelaPrincipal extends JFrame {
 		Animal a = new Animal();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 615, 600);
+		setBounds(100, 100, 500, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		

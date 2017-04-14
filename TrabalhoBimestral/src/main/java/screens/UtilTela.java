@@ -41,22 +41,20 @@ public class UtilTela {
 		contentPane.setLayout(gbl_contentPane);
 		
 		int x = 0;
-		int y = 1;
+		int y = 2;
+		int z = 0;
 		
 		for(Field f : clazz.getDeclaredFields()){
-			
 			JLabel lblNewLabel = new JLabel(f.getAnnotation(Coluna.class).nome().toUpperCase());
-			contentPane.add(lblNewLabel, createConstraints(0, x));
+			contentPane.add(lblNewLabel, createConstraints(z, 0));
 			
 			JTextField textField = new JTextField();
 			textFields.add(textField);
 			textField.setName(f.getName());
-			contentPane.add(textField, createConstraints(0, y));
+			contentPane.add(textField, createConstraints(z, 1));
 			textField.setColumns(30);
-			x+=2;
-			y+=2;
+			z++;
 		}
-		x = 0;
 		
 		JButton create = new JButton("Create");
 		create.addActionListener(new ActionListener(){
@@ -64,7 +62,7 @@ public class UtilTela {
 				sql.Create(a);
 			}
 		});
-		contentPane.add(create, createConstraints(x, y));
+		contentPane.add(create, createConstraints(x++, y));
 		
 		JButton insert = new JButton("Insert");		
 		insert.addActionListener(new ActionListener(){
@@ -76,15 +74,13 @@ public class UtilTela {
 				try {
 					sql.Insert(a);
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
-		contentPane.add(insert, createConstraints(x+=2, y));
+		contentPane.add(insert, createConstraints(x++, y));
 		
 		JButton delete = new JButton("Delete");		
 		delete.addActionListener(new ActionListener(){
@@ -93,15 +89,13 @@ public class UtilTela {
 				try {
 					sql.Delete(a);
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
-		contentPane.add(delete, createConstraints(x+=2, y));
+		contentPane.add(delete, createConstraints(x++, y));
 		
 		JButton search = new JButton("Search all");	
 		search.addActionListener(new ActionListener(){
@@ -110,7 +104,7 @@ public class UtilTela {
 				table.setModel(x);
 			}
 		});
-		contentPane.add(search, createConstraints(x+=2, y));
+		contentPane.add(search, createConstraints(x++, y));
 		
 		JButton searchid = new JButton("Search by id");	
 		searchid.addActionListener(new ActionListener(){
@@ -119,15 +113,13 @@ public class UtilTela {
 				try {
 					sql.SingleSearch(a);
 				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
-		contentPane.add(searchid, createConstraints(x+=2, y));
+		contentPane.add(searchid, createConstraints(x++, y));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
