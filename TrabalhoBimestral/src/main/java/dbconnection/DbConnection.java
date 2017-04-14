@@ -22,7 +22,7 @@ public class DbConnection {
 	}
 	
 	public boolean Connect(){
-		String URL = "jdbc:h2:C:\\Users\\isaha\\Desktop\\nmexeaki\\bancofudido";
+		String URL = "jdbc:postgresql://localhost:5432/postgres";
 		String USER = "1234";
 		String PASS = "1234";
 		boolean SUCCESS = false;
@@ -146,7 +146,6 @@ public class DbConnection {
 			ps = con.prepareStatement(s);
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
