@@ -61,8 +61,6 @@ public class UtilTela {
 		}
 		z++;
 		
-		
-		
 		JButton create = new JButton("Create");
 		create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {

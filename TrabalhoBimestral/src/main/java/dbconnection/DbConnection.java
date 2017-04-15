@@ -146,7 +146,6 @@ public class DbConnection {
 					result.add(rs.getString(j));
 				}
 			}
-			
 			System.out.println("\n-----COMANDO EXECUTADO----- \n "+s+"\n---------------------------");
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -40,7 +40,6 @@ public class ClasseTableModel extends AbstractTableModel {
 		for(Field f : clazz.getDeclaredFields()){
 			columnNames.add(f.getName().toUpperCase());
 		}
-		
 		return columnNames.get(column);
 	}	
 
