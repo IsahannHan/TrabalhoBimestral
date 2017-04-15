@@ -14,7 +14,7 @@ public class ClasseTableModel extends AbstractTableModel {
 	private Class<?> clazz;
 	int columnNumber = 0;
 	List<String> columnNames = new ArrayList<String>();
-	
+	int index = 0;
 	
 	public ClasseTableModel(List<String> lista, Class<?> clazz) {
 		this.lista = lista;
@@ -43,10 +43,6 @@ public class ClasseTableModel extends AbstractTableModel {
 	}	
 
 	public Object getValueAt(int row, int column) {
-		int x = 0;
-		for(Field f : clazz.getDeclaredFields()){
-			return lista.get(x);
-		}
-		return "Coluna inexistente";
+		return lista.get(index++);
 	}
 }
