@@ -12,7 +12,6 @@ public class ClasseTableModel extends AbstractTableModel {
 
 	private List<String> lista;
 	private Class<?> clazz;
-	
 
 	public ClasseTableModel(List<String> lista, Class<?> clazz) {
 		this.lista = lista;
