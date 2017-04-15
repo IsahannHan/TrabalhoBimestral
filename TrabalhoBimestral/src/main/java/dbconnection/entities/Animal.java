@@ -1,6 +1,9 @@
-package dbconnection;
+package dbconnection.entities;
 
 import java.math.BigDecimal;
+
+import dbconnection.Coluna;
+import dbconnection.Tabela;
 
 @Tabela("ANIMAL_T")
 public class Animal {
