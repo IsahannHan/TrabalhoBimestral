@@ -4,10 +4,10 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
 
-import dbconnection.Animal;
 import dbconnection.Coluna;
-import dbconnection.Pessoa;
 import dbconnection.Tabela;
+import dbconnection.entities.Animal;
+import dbconnection.entities.Pessoa;
 
 public class UtilSql {
 	

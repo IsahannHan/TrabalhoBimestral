@@ -18,9 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import dbconnection.Animal;
 import dbconnection.Coluna;
 import dbconnection.DbConnection;
+import dbconnection.entities.Animal;
 
 public class UtilTela {
 
@@ -140,8 +140,8 @@ public class UtilTela {
 		contentPane.add(dropTable, createConstraints(x++, y));
 		
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridheight = 600;
-		gbc_scrollPane.gridwidth = 600;
+		gbc_scrollPane.gridheight = 600 + z;
+		gbc_scrollPane.gridwidth = 600 + z;
 		gbc_scrollPane.insets = new Insets(5, 5, 5, 5);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
