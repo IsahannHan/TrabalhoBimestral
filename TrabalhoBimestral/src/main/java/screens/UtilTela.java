@@ -59,6 +59,9 @@ public class UtilTela {
 				textField.setColumns(30);
 				z++;
 		}
+		z++;
+		
+		
 		
 		JButton create = new JButton("Create");
 		create.addActionListener(new ActionListener(){
@@ -115,7 +118,8 @@ public class UtilTela {
 			public void actionPerformed(ActionEvent arg0) {
 				id = Integer.parseInt(textFields.get(0).getText());
 				try {
-					sql.SearchById(clazz, id);
+					ClasseTableModel x = new ClasseTableModel(sql.SearchById(clazz, id), clazz);
+					table.setModel(x);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -133,7 +137,7 @@ public class UtilTela {
 		});
 		contentPane.add(dropTable, createConstraints(x++, y));
 		
-		JScrollPane scrollPane = new JScrollPane();
+		final JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridheight = 600;
 		gbc_scrollPane.gridwidth = 600;
@@ -142,6 +146,17 @@ public class UtilTela {
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 10;
 		contentPane.add(scrollPane, gbc_scrollPane);
+		
+		JButton clean = new JButton("Limpar");
+		clean.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for(int i = 0; i < textFields.size(); i++){
+					textFields.get(i).setText("");
+				}
+				scrollPane.setViewportView(null);
+			}
+		});
+		contentPane.add(clean, createConstraints(z++, 1));
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);

@@ -22,7 +22,7 @@ public class ClasseTableModel extends AbstractTableModel {
 	public int getColumnCount() {
 		int column = 0;
 		for(Field f : clazz.getDeclaredFields()){
-			if(f.getAnnotatedType().equals(Coluna.class)){
+			if(f.isAnnotationPresent(Coluna.class)){
 				column++;
 			}
 		}
@@ -35,29 +35,19 @@ public class ClasseTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int column) {
+		
 		List<String> columnNames = new ArrayList<String>();
 		for(Field f : clazz.getDeclaredFields()){
 			columnNames.add(f.getName().toUpperCase());
 		}
 		
-		for(int i = 0; i < columnNames.size(); i++){
-			return columnNames.get(i);
-		}
-		
-		return super.getColumnName(column);
+		return columnNames.get(column);
 	}	
 
 	public Object getValueAt(int row, int column) {
 		lista.get(row);
-		switch (column) {
-		case 0:
-			return a.getId();
-		case 1:
-			return a.getNome();
-		case 2:
-			return a.getIdade();
-		case 3:
-			return a.getPeso();
+		for(Field f : clazz.getDeclaredFields()){
+			return lista.get(column);
 		}
 		return "Coluna inexistente";
 	}
