@@ -125,6 +125,7 @@ public class UtilSql {
 			f.setAccessible(true);
 			Coluna anotacaoColuna = f.getAnnotation(Coluna.class);
 			
+			//Somente entrará se for delete por primary key.
 			if(anotacaoColuna.pk() == true){
 				sb.append(getColumnName(f, anotacaoColuna)+ " = ");
 				try {

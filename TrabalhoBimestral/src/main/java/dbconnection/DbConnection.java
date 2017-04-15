@@ -15,6 +15,7 @@ import dbconnection.sql.UtilSql;
 public class DbConnection {
 
 	private Connection con;
+	//Objeto que será utilizado para obter as SQLs necessárias.
 	UtilSql sql = new UtilSql();
 
 	//Funções de conexão
@@ -143,6 +144,7 @@ public class DbConnection {
 			
 			while(rs.next()){
 				for(int j = 1; j <= column; j++){
+					//Salva os campos numa lista do tamanho do número de colunas.
 					result.add(rs.getString(j));
 				}
 			}

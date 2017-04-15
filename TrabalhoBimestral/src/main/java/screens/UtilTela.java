@@ -53,6 +53,7 @@ public class UtilTela {
 				contentPane.add(lblNewLabel, createConstraints(z, 0));
 				
 				JTextField textField = new JTextField();
+				//Adiciona à lista de textfields para serem acessados posteriormente.
 				textFields.add(textField);
 				textField.setName(f.getName());
 				contentPane.add(textField, createConstraints(z, 1));
@@ -76,6 +77,7 @@ public class UtilTela {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> lista = new ArrayList<String>();
 				for(int i = 0; i < textFields.size(); i++){
+					//Pega a informação de todos os textfields, até o do id(porém este não será utilizado)
 					lista.add(textFields.get(i).getText());
 				}
 				try {
@@ -92,6 +94,7 @@ public class UtilTela {
 		JButton delete = new JButton("Delete");		
 		delete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
+				//Pega o id que está presente no primeiro campo.
 				id = Integer.parseInt(textFields.get(0).getText());
 				try {
 					sql.Delete(clazz, id);
@@ -107,6 +110,7 @@ public class UtilTela {
 		JButton search = new JButton("Search all");	
 		search.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
+				//A linha abaixo é necessária pois a cada vez que o botão Clean é pressionado ele define o viewport como null.
 				scrollPane.setViewportView(table);
 				ClasseTableModel x = new ClasseTableModel(sql.SearchAll(clazz), clazz);
 				table.setModel(x);
@@ -148,9 +152,10 @@ public class UtilTela {
 		gbc_scrollPane.gridy = 10;
 		contentPane.add(scrollPane, gbc_scrollPane);
 		
-		JButton clean = new JButton("Limpar");
+		JButton clean = new JButton("Clean");
 		clean.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Limpa os textfields e o scrollpane com a table.
 				for(int i = 0; i < textFields.size(); i++){
 					textFields.get(i).setText("");
 				}

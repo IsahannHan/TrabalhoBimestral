@@ -35,6 +35,7 @@ public class TelaPrincipal extends JFrame {
 	 */
 	public TelaPrincipal() {
 		
+		//Criados objetos das classes para teste.
 		Animal a = new Animal();
 		Pessoa p = new Pessoa();
 		Carro c = new Carro();
@@ -45,7 +46,7 @@ public class TelaPrincipal extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
-		setContentPane(new UtilTela().generateScreen(p));
+		setContentPane(new UtilTela().generateScreen(a));
 	}
 
 }

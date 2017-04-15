@@ -8,6 +8,7 @@ import dbconnection.Tabela;
 @Tabela("ANIMAL_T")
 public class Animal {
 	
+	//O primary key não necessita de SERIAL na restrição pois ele será adicionado automaticamente.
 	@Coluna(nome="id_animal", pk=true, restricao="NOT NULL")
 	private int id;
 	

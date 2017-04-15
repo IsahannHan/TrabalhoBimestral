@@ -22,6 +22,7 @@ public class ClasseTableModel extends AbstractTableModel {
 		
 		for(Field f : clazz.getDeclaredFields()){
 			if(f.isAnnotationPresent(Coluna.class)){
+				//Salva o nome das colunas e o número de colunas.
 				columnNumber++;
 				columnNames.add(f.getName().toUpperCase());
 			}
@@ -43,6 +44,7 @@ public class ClasseTableModel extends AbstractTableModel {
 	}	
 
 	public Object getValueAt(int row, int column) {
+		//O incremento desse índice viajará por toda a lista, percorrendo todos os membros.
 		return lista.get(index++);
 	}
 }
