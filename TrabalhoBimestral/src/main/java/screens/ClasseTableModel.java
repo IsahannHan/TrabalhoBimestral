@@ -12,40 +12,40 @@ public class ClasseTableModel extends AbstractTableModel {
 
 	private List<String> lista;
 	private Class<?> clazz;
-
+	int columnNumber = 0;
+	List<String> columnNames = new ArrayList<String>();
+	
+	
 	public ClasseTableModel(List<String> lista, Class<?> clazz) {
 		this.lista = lista;
 		this.clazz = clazz;
+		
+		for(Field f : clazz.getDeclaredFields()){
+			if(f.isAnnotationPresent(Coluna.class)){
+				columnNumber++;
+				columnNames.add(f.getName().toUpperCase());
+			}
+		}
 	}
 	
 	public int getColumnCount() {
-		int column = 0;
-		for(Field f : clazz.getDeclaredFields()){
-			if(f.isAnnotationPresent(Coluna.class)){
-				column++;
-			}
-		}
-		return column;
+		return columnNumber;
 	}
 
 	public int getRowCount() {
-		return lista.size();
+		//Essa divisão é realizada pois a lista vem com todos os registros enfileirados.
+		return lista.size() / columnNumber;
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		
-		List<String> columnNames = new ArrayList<String>();
-		for(Field f : clazz.getDeclaredFields()){
-			columnNames.add(f.getName().toUpperCase());
-		}
 		return columnNames.get(column);
 	}	
 
 	public Object getValueAt(int row, int column) {
-		lista.get(row);
+		int x = 0;
 		for(Field f : clazz.getDeclaredFields()){
-			return lista.get(column);
+			return lista.get(x);
 		}
 		return "Coluna inexistente";
 	}
